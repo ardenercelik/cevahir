@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+tsconfig.tsbuildinfo
+.env
+.env.*
+
+# Google Stitch tasarım referans klasörleri
+atelier_b2b_*/
+design-reference/
