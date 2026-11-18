@@ -136,6 +136,16 @@ export function WatchCatalogPage({ isSearchMode = false }: { isSearchMode?: bool
   const currentYearMin = filters.yearMin ?? WATCH_YEAR_MIN_BOUND;
   const currentYearMax = filters.yearMax ?? WATCH_YEAR_MAX_BOUND;
 
+  const activeWatchFilterCount =
+    (filters.brands?.length || 0) +
+    (filters.conditions?.length || 0) +
+    (filters.caseDiameters?.length || 0) +
+    (filters.hasBox ? 1 : 0) +
+    (filters.hasPapers ? 1 : 0) +
+    (filters.priceMinUsd !== undefined || filters.priceMaxUsd !== undefined ? 1 : 0) +
+    (filters.yearMin !== undefined || filters.yearMax !== undefined ? 1 : 0) +
+    (filters.search ? 1 : 0);
+
   const FilterPanel = (
     <div className="space-y-5">
       <div className="flex items-center justify-between pb-1 border-b border-outline-variant/40">
@@ -443,8 +453,8 @@ export function WatchCatalogPage({ isSearchMode = false }: { isSearchMode?: bool
             </p>
           </div>
 
-          {/* 3 Metric Cards */}
-          <div className="flex items-center gap-3 flex-wrap shrink-0">
+          {/* 3 Metric Cards (hidden on small mobile to keep listings at the top) */}
+          <div className="hidden sm:flex items-center gap-3 flex-wrap shrink-0">
             <div className="flex items-center gap-2.5 px-4 py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/40">
               <Watch className="w-5 h-5 text-primary-container" />
               <div className="flex flex-col">
@@ -532,10 +542,15 @@ export function WatchCatalogPage({ isSearchMode = false }: { isSearchMode?: bool
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(true)}
-                  className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/50 text-label-md text-primary"
+                  className="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary text-label-md font-semibold shadow-sm"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
-                  Filtrele
+                  <span>Filtrele</span>
+                  {activeWatchFilterCount > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold tabular-nums">
+                      {activeWatchFilterCount}
+                    </span>
+                  )}
                 </button>
                 <span className="text-headline-sm text-primary font-bold tabular-nums">
                   {watches.length} Saat Bulundu

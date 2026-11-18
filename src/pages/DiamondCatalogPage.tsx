@@ -71,6 +71,7 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
   // Default view mode is 'table' (Liste görünümü) per user requirement
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const { currency, setCurrency, isFavorite, toggleFavorite, isCompared, toggleCompare, compareIds } =
     useMarketplace();
 
@@ -150,6 +151,20 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
   const currentCaratMax = filters.caratMax ?? CARAT_MAX_BOUND;
   const currentPriceMin = filters.priceMinUsd ?? PRICE_MIN_BOUND;
   const currentPriceMax = filters.priceMaxUsd ?? PRICE_MAX_BOUND;
+
+  const activeFilterCount =
+    (filters.shapes?.length || 0) +
+    (filters.colors?.length || 0) +
+    (filters.clarities?.length || 0) +
+    (filters.cuts?.length || 0) +
+    (filters.certLabs?.length || 0) +
+    (filters.polishes?.length || 0) +
+    (filters.symmetries?.length || 0) +
+    (filters.fluorescences?.length || 0) +
+    (filters.caratMin !== undefined || filters.caratMax !== undefined ? 1 : 0) +
+    (filters.priceMinUsd !== undefined || filters.priceMaxUsd !== undefined ? 1 : 0) +
+    (filters.search ? 1 : 0) +
+    (filters.vaultLocation ? 1 : 0);
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 lg:px-8 py-6 space-y-6">
@@ -245,8 +260,53 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
         </div>
       </div>
 
-      {/* 10 Interactive Vector Shape Cards */}
-      <div>
+      {/* 10 Interactive Vector Shape Cards + Primary Filter Engine (Inline on Desktop, Modal Drawer on Mobile) */}
+      <div
+        className={cn(
+          mobileFiltersOpen
+            ? 'fixed inset-0 z-50 bg-black/50 flex justify-end lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:block'
+            : 'hidden lg:block'
+        )}
+      >
+        <div
+          className="fixed inset-0 lg:hidden"
+          onClick={() => setMobileFiltersOpen(false)}
+          aria-hidden="true"
+        />
+        <div className="relative z-10 w-full max-w-lg bg-surface h-full overflow-y-auto p-4 space-y-5 lg:static lg:max-w-none lg:bg-transparent lg:h-auto lg:overflow-visible lg:p-0 lg:space-y-6">
+          {/* Mobile Modal Header */}
+          <div className="flex items-center justify-between pb-3 border-b border-outline-variant/50 lg:hidden sticky top-0 bg-surface z-20 pt-1">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="w-4 h-4 text-primary" />
+              <span className="text-title-md text-primary font-bold">Pırlanta Filtreleri</span>
+              {activeFilterCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full bg-primary text-on-primary text-label-sm font-bold tabular-nums">
+                  {activeFilterCount}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              {activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="text-label-sm text-error font-semibold"
+                >
+                  Temizle
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="p-1.5 rounded-lg bg-surface-container-low text-primary"
+                aria-label="Filtreleri kapat"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className="text-label-md uppercase tracking-wider text-primary">
@@ -699,9 +759,35 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
         </div>
       </section>
 
+          {/* Mobile Modal Footer */}
+          <div className="sticky bottom-0 bg-surface pt-3 pb-2 border-t border-outline-variant/50 lg:hidden z-20">
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(false)}
+              className="w-full py-3 rounded-xl bg-primary-container text-on-primary text-title-md font-bold shadow-md"
+            >
+              Sonuçları Göster ({diamonds.length} Pırlanta)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Filter Summary Strip & Catalog View Switcher Toolbar */}
       <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant/40">
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen(true)}
+            className="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary text-label-md font-semibold shadow-sm"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            <span>Filtrele</span>
+            {activeFilterCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold tabular-nums">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
           <span className="text-headline-sm text-primary font-bold mr-2 tabular-nums">
             {diamonds.length} Pırlanta
           </span>

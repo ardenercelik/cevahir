@@ -1,4 +1,5 @@
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MarketplaceProvider } from '@/context/MarketplaceContext';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -34,11 +35,20 @@ const queryClient = new QueryClient({
   },
 });
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, [pathname]);
+  return null;
+}
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MarketplaceProvider>
         <HashRouter>
+          <ScrollToTop />
           <Routes>
             {/* Marketplace Routes */}
             <Route element={<MainLayout />}>

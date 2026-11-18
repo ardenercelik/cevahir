@@ -202,12 +202,6 @@ export function DiamondDetailPage() {
                     <span>360° Muayene</span>
                   </button>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-data-mono text-label-sm">
-                    40X GEMOLOJİK OPTİK
-                  </span>
-                </div>
               </div>
 
               <div className="w-full h-[360px] sm:h-[440px] relative flex items-center justify-center overflow-hidden my-3 rounded-lg bg-surface-container-low group">
