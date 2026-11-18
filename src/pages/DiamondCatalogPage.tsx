@@ -211,13 +211,13 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
           </p>
         </div>
 
-        {/* Segmented Origin Toggle */}
-        <div className="flex flex-wrap items-center self-start lg:self-auto bg-surface-container-low p-1 rounded-xl shadow-sm border border-outline-variant/40">
+        {/* Segmented Origin Toggle (Single sleek row on mobile & desktop) */}
+        <div className="grid grid-cols-3 sm:inline-flex items-center w-full sm:w-auto bg-surface-container-low p-1 rounded-xl shadow-sm border border-outline-variant/40 gap-1">
           <button
             type="button"
             onClick={() => updateParam('origin', undefined)}
             className={cn(
-              'px-3.5 py-2 rounded-lg text-body-sm font-semibold transition-all',
+              'px-2.5 sm:px-3.5 py-2 rounded-lg text-body-sm font-semibold transition-all text-center whitespace-nowrap',
               filters.origin === 'all'
                 ? 'bg-surface-container-lowest text-primary shadow-sm'
                 : 'text-on-surface-variant hover:text-primary'
@@ -229,14 +229,15 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
             type="button"
             onClick={() => updateParam('origin', 'natural')}
             className={cn(
-              'flex items-center gap-1.5 px-4 py-2 rounded-lg text-body-sm font-semibold transition-all',
+              'flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-4 py-2 rounded-lg text-body-sm font-semibold transition-all whitespace-nowrap',
               filters.origin === 'natural'
                 ? 'bg-surface-container-lowest text-primary shadow-sm'
                 : 'text-on-surface-variant hover:text-primary'
             )}
           >
-            <Diamond className="w-4 h-4 text-secondary" />
-            <span>Doğal Pırlantalar</span>
+            <Diamond className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary shrink-0" />
+            <span className="sm:hidden">Doğal</span>
+            <span className="hidden sm:inline">Doğal Pırlantalar</span>
             <span className="px-1.5 py-0.5 rounded-full bg-surface-container text-primary text-label-sm tabular-nums">
               {naturalTotal}
             </span>
@@ -245,14 +246,15 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
             type="button"
             onClick={() => updateParam('origin', 'lab')}
             className={cn(
-              'flex items-center gap-1.5 px-4 py-2 rounded-lg text-body-sm font-semibold transition-all',
+              'flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-4 py-2 rounded-lg text-body-sm font-semibold transition-all whitespace-nowrap',
               filters.origin === 'lab'
                 ? 'bg-surface-container-lowest text-primary shadow-sm'
                 : 'text-on-surface-variant hover:text-primary'
             )}
           >
-            <Sparkles className="w-4 h-4 text-tertiary-container" />
-            <span>Laboratuvar Pırlantaları</span>
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-tertiary-container shrink-0" />
+            <span className="sm:hidden">Lab</span>
+            <span className="hidden sm:inline">Laboratuvar Pırlantaları</span>
             <span className="px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm tabular-nums">
               {labTotal}
             </span>
@@ -264,18 +266,18 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
       <div
         className={cn(
           mobileFiltersOpen
-            ? 'fixed inset-0 z-50 bg-black/50 flex justify-end lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:block'
+            ? 'fixed inset-0 !mt-0 z-[100] bg-black/50 flex justify-end lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:block lg:!mt-6'
             : 'hidden lg:block'
         )}
       >
         <div
-          className="fixed inset-0 lg:hidden"
+          className="fixed inset-0 z-10 lg:hidden"
           onClick={() => setMobileFiltersOpen(false)}
           aria-hidden="true"
         />
-        <div className="relative z-10 w-full max-w-lg bg-surface h-full overflow-y-auto p-4 space-y-5 lg:static lg:max-w-none lg:bg-transparent lg:h-auto lg:overflow-visible lg:p-0 lg:space-y-6">
-          {/* Mobile Modal Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-outline-variant/50 lg:hidden sticky top-0 bg-surface z-20 pt-1">
+        <div className="relative z-20 w-full max-w-lg bg-white h-full flex flex-col shadow-2xl lg:static lg:max-w-none lg:bg-transparent lg:h-auto lg:block lg:shadow-none">
+          {/* Mobile Modal Header (Fixed outside scroll area so items never bleed behind it) */}
+          <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-outline-variant/50 bg-white lg:hidden">
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-primary" />
               <span className="text-title-md text-primary font-bold">Pırlanta Filtreleri</span>
@@ -306,6 +308,8 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
             </div>
           </div>
 
+          {/* Scrollable Filter Body on Mobile / Normal Flow on Desktop */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-5 lg:overflow-visible lg:p-0 lg:space-y-6">
           <div>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
@@ -758,9 +762,10 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
           )}
         </div>
       </section>
+          </div>
 
-          {/* Mobile Modal Footer */}
-          <div className="sticky bottom-0 bg-surface pt-3 pb-2 border-t border-outline-variant/50 lg:hidden z-20">
+          {/* Mobile Modal Footer (Fixed outside scroll area) */}
+          <div className="shrink-0 p-4 bg-white border-t border-outline-variant/50 lg:hidden">
             <button
               type="button"
               onClick={() => setMobileFiltersOpen(false)}
@@ -773,148 +778,154 @@ export function DiamondCatalogPage({ isSearchMode = false }: { isSearchMode?: bo
       </div>
 
       {/* Filter Summary Strip & Catalog View Switcher Toolbar */}
-      <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant/40">
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setMobileFiltersOpen(true)}
-            className="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary text-label-md font-semibold shadow-sm"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            <span>Filtrele</span>
-            {activeFilterCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold tabular-nums">
-                {activeFilterCount}
-              </span>
+      <section className="flex flex-col gap-3 bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant/40">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(true)}
+              className="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary text-label-md font-semibold shadow-sm"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              <span>Filtrele</span>
+              {activeFilterCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold tabular-nums">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+            <span className="text-headline-sm text-primary font-bold tabular-nums">
+              {diamonds.length} Pırlanta
+            </span>
+            {compareIds.length > 0 && (
+              <Link
+                to="/karsilastir"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-label-sm font-bold"
+              >
+                <Scale className="w-3.5 h-3.5" />
+                <span>Karşılaştır ({compareIds.length})</span>
+              </Link>
             )}
-          </button>
-          <span className="text-headline-sm text-primary font-bold mr-2 tabular-nums">
-            {diamonds.length} Pırlanta
-          </span>
-
-          {filters.origin && filters.origin !== 'all' && (
-            <button
-              type="button"
-              onClick={() => updateParam('origin', undefined)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold hover:bg-error-container"
-            >
-              <span>{filters.origin === 'natural' ? 'Doğal' : 'Laboratuvar'}</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {filters.shapes?.map((sh) => (
-            <button
-              key={sh}
-              type="button"
-              onClick={() => toggleArrayParam('shape', sh, filters.shapes)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
-            >
-              <span>{sh}</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ))}
-
-          {filters.colors?.map((col) => (
-            <button
-              key={col}
-              type="button"
-              onClick={() => toggleArrayParam('color', col, filters.colors)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
-            >
-              <span>{col} Renk</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ))}
-
-          {filters.clarities?.map((cl) => (
-            <button
-              key={cl}
-              type="button"
-              onClick={() => toggleArrayParam('clarity', cl, filters.clarities)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
-            >
-              <span>{cl}</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ))}
-
-          {filters.certLabs?.map((lab) => (
-            <button
-              key={lab}
-              type="button"
-              onClick={() => toggleArrayParam('cert', lab, filters.certLabs)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
-            >
-              <span>{lab}</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ))}
-
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="text-error hover:underline text-label-md ml-1 transition-colors"
-          >
-            Tüm Filtreleri Temizle
-          </button>
-
-          {compareIds.length > 0 && (
-            <Link
-              to="/karsilastir"
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-label-sm font-bold"
-            >
-              <Scale className="w-3.5 h-3.5" />
-              Karşılaştır ({compareIds.length})
-            </Link>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          {/* Table (Default) / Grid View Switcher */}
-          <div className="flex items-center bg-surface-container p-1 rounded-lg">
-            <button
-              type="button"
-              onClick={() => setViewMode('table')}
-              className={cn(
-                'flex items-center gap-1.5 px-3 py-1 rounded text-label-md font-semibold transition-all',
-                viewMode === 'table'
-                  ? 'bg-surface-container-lowest text-primary shadow-sm'
-                  : 'text-on-surface-variant hover:text-primary'
-              )}
-            >
-              <TableIcon className="w-4 h-4" />
-              <span>Liste Görünümü</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('grid')}
-              className={cn(
-                'flex items-center gap-1.5 px-3 py-1 rounded text-label-md font-semibold transition-all',
-                viewMode === 'grid'
-                  ? 'bg-surface-container-lowest text-primary shadow-sm'
-                  : 'text-on-surface-variant hover:text-primary'
-              )}
-            >
-              <LayoutGrid className="w-4 h-4" />
-              <span>Vitrin Kart</span>
-            </button>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="hidden lg:inline text-label-sm text-outline">Sıralama:</label>
-            <select
-              value={filters.sortBy || 'newest'}
-              onChange={(e) => updateParam('sort', e.target.value)}
-              className="bg-surface-container-low border border-outline-variant/40 px-3 py-1.5 rounded-lg text-body-sm text-primary font-medium focus:outline-none"
-            >
-              <option value="newest">Önerilen Sıralama (En Yeni)</option>
-              <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
-              <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
-              <option value="carat-desc">Karat: Azalan (Büyük Taşlar)</option>
-            </select>
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
+            {/* Table (Default) / Grid View Switcher */}
+            <div className="flex items-center bg-surface-container p-1 rounded-lg">
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                className={cn(
+                  'flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded text-label-md font-semibold transition-all',
+                  viewMode === 'table'
+                    ? 'bg-surface-container-lowest text-primary shadow-sm'
+                    : 'text-on-surface-variant hover:text-primary'
+                )}
+              >
+                <TableIcon className="w-4 h-4" />
+                <span>Liste</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                className={cn(
+                  'flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded text-label-md font-semibold transition-all',
+                  viewMode === 'grid'
+                    ? 'bg-surface-container-lowest text-primary shadow-sm'
+                    : 'text-on-surface-variant hover:text-primary'
+                )}
+              >
+                <LayoutGrid className="w-4 h-4" />
+                <span>Kart</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+              <label className="hidden lg:inline text-label-sm text-outline">Sıralama:</label>
+              <select
+                value={filters.sortBy || 'newest'}
+                onChange={(e) => updateParam('sort', e.target.value)}
+                className="w-full sm:w-auto bg-surface-container-low border border-outline-variant/40 px-3 py-1.5 rounded-lg text-body-sm text-primary font-medium focus:outline-none"
+              >
+                <option value="newest">Önerilen Sıralama (En Yeni)</option>
+                <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
+                <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
+                <option value="carat-desc">Karat: Azalan (Büyük Taşlar)</option>
+              </select>
+            </div>
           </div>
         </div>
+
+        {/* Active Filter Chips Row (only shown when filters are active) */}
+        {(activeFilterCount > 0 || (filters.origin && filters.origin !== 'all')) && (
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-outline-variant/30">
+            {filters.origin && filters.origin !== 'all' && (
+              <button
+                type="button"
+                onClick={() => updateParam('origin', undefined)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold hover:bg-error-container"
+              >
+                <span>{filters.origin === 'natural' ? 'Doğal' : 'Laboratuvar'}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {filters.shapes?.map((sh) => (
+              <button
+                key={sh}
+                type="button"
+                onClick={() => toggleArrayParam('shape', sh, filters.shapes)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
+              >
+                <span>{sh}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ))}
+
+            {filters.colors?.map((col) => (
+              <button
+                key={col}
+                type="button"
+                onClick={() => toggleArrayParam('color', col, filters.colors)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
+              >
+                <span>{col} Renk</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ))}
+
+            {filters.clarities?.map((cl) => (
+              <button
+                key={cl}
+                type="button"
+                onClick={() => toggleArrayParam('clarity', cl, filters.clarities)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
+              >
+                <span>{cl}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ))}
+
+            {filters.certLabs?.map((lab) => (
+              <button
+                key={lab}
+                type="button"
+                onClick={() => toggleArrayParam('cert', lab, filters.certLabs)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-primary text-body-sm font-semibold"
+              >
+                <span>{lab}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ))}
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="text-error hover:underline text-label-md ml-1 transition-colors"
+            >
+              Tüm Filtreleri Temizle
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Results Area */}

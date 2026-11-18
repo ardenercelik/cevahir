@@ -148,7 +148,7 @@ export function WatchCatalogPage({ isSearchMode = false }: { isSearchMode?: bool
 
   const FilterPanel = (
     <div className="space-y-5">
-      <div className="flex items-center justify-between pb-1 border-b border-outline-variant/40">
+      <div className="hidden lg:flex items-center justify-between pb-1 border-b border-outline-variant/40">
         <div className="flex items-center gap-1.5">
           <SlidersHorizontal className="w-4 h-4 text-primary" />
           <span className="text-title-md text-primary font-bold">Filtreleme</span>
@@ -720,23 +720,54 @@ export function WatchCatalogPage({ isSearchMode = false }: { isSearchMode?: bool
 
       {/* Mobile Filter Drawer */}
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="relative ml-auto w-full max-w-sm bg-surface-container-lowest h-full overflow-y-auto p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-outline-variant pb-3">
-              <span className="text-title-md text-primary font-bold">Saat Filtreleri</span>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)}>
-                <X className="w-5 h-5" />
+        <div className="fixed inset-0 z-[100] lg:hidden flex justify-end">
+          <div
+            className="fixed inset-0 bg-black/50 z-10"
+            onClick={() => setMobileFiltersOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="relative z-20 w-full max-w-md bg-white h-full flex flex-col shadow-2xl">
+            <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-outline-variant/50 bg-white">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-primary" />
+                <span className="text-title-md text-primary font-bold">Saat Filtreleri</span>
+                {activeWatchFilterCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-primary text-on-primary text-label-sm font-bold tabular-nums">
+                    {activeWatchFilterCount}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3">
+                {activeWatchFilterCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="inline-flex items-center gap-1 text-label-sm text-error font-semibold"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Sıfırla
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="p-1.5 rounded-lg bg-surface-container-low text-primary"
+                  aria-label="Filtreleri kapat"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-5">{FilterPanel}</div>
+            <div className="shrink-0 p-4 border-t border-outline-variant/50 bg-white">
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="w-full py-3 rounded-xl bg-primary-container text-on-primary text-title-md font-bold shadow-md"
+              >
+                Sonuçları Göster ({watches.length} Saat)
               </button>
             </div>
-            {FilterPanel}
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(false)}
-              className="w-full py-2.5 rounded-lg bg-primary-container text-on-primary text-label-md"
-            >
-              Sonuçları Göster ({watches.length})
-            </button>
           </div>
         </div>
       )}
